@@ -1,9 +1,11 @@
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
 const musicCore = require("./modules/music.js");
+const glitch = require("./modules/glitch.js")
 
 
 const client = new Discord.Client();
+glitch.start();
 
 client.once("ready", () => {
   console.log("Ready!");
