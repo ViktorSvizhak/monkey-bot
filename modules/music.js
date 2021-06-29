@@ -2,7 +2,7 @@ const ytdl = require("ytdl-core");
 
 const queue = new Map();
 
-let execute = async function (message, serverQueue) {
+let execute = async function (message) {
     const args = message.content.split(" ");
     
     const voiceChannel = message.member.voice.channel;
@@ -24,6 +24,8 @@ let execute = async function (message, serverQueue) {
         url: songInfo.videoDetails.video_url,
         };
     
+    const serverQueue = getServerQueue(message);
+
     if (!serverQueue) {
         const queueContruct = {
             textChannel: message.channel,
@@ -53,12 +55,14 @@ let execute = async function (message, serverQueue) {
     }
 }
 
-let skip = function (message, serverQueue) {
+let skip = function (message) {
     if (!message.member.voice.channel) {
         return message.channel.send(
             "You have to be in a voice channel to stop the music!"
         );
     }
+
+    const serverQueue = getServerQueue(message);
 
     if (!serverQueue) {
         return message.channel.send("There is no song that I could skip!");
@@ -67,19 +71,21 @@ let skip = function (message, serverQueue) {
     serverQueue.connection.dispatcher.end();
 }
 
-let stop = function (message, serverQueue) {
+let stop = function (message) {
     if (!message.member.voice.channel){
         return message.channel.send(
             "You have to be in a voice channel to stop the music!"
         );
     }
     
-if (!serverQueue){
-    return message.channel.send("There is no song that I could stop!");
-}
-    
-serverQueue.songs = [];
-serverQueue.connection.dispatcher.end();
+    const serverQueue = getServerQueue(message);
+
+    if (!serverQueue){
+        return message.channel.send("There is no song that I could stop!");
+    }
+        
+    serverQueue.songs = [];
+    serverQueue.connection.dispatcher.end();
 }
 
 
@@ -102,7 +108,10 @@ function play(guild, song) {
     serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
+function getServerQueue(message) {
+    return queue.get(message.guild.id);
+}
+
 module.exports.play = execute;
 module.exports.skip = skip;
 module.exports.stop = stop;
-module.exports.queue = queue;

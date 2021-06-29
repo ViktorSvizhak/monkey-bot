@@ -14,3 +14,4 @@ function start(){
 }
 
 module.exports.start = start;
+module.exports.token = process.env.bot_token;
