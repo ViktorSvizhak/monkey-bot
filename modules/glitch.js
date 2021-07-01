@@ -2,7 +2,7 @@ const http = require('http');
 const express = require('express');
 const app = express();
 
-function start(){
+let start = function (){
     app.get("/", (request, response) => {
     console.log(Date.now() + " Ping Received");
     response.sendStatus(200);
@@ -10,8 +10,10 @@ function start(){
     app.listen(process.env.PORT);
     setInterval(() => {
     http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-    }, 280000);
+    }, 240000);
 }
 
-module.exports.start = start;
-module.exports.token = process.env.bot_token;
+module.exports = {
+    start: start,
+    token : process.env.bot_token
+};
