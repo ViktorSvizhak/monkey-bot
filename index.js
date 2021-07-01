@@ -1,13 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const Discord = require("discord.js");
-const { token } = require("./config.json");
 const glitch = require("./modules/glitch")
 
-//const token = glitch.token;
+const token = glitch.token;
 const client = new Discord.Client();
 
-//glitch.start();
+glitch.start();
 
 client.once("ready", () => {
   console.log("Ready!");
@@ -40,23 +39,5 @@ client.once("reconnecting", () => {
 client.once("disconnect", () => {
   console.log("Disconnect!");
 });
-
-// client.on("message", async message => {
-//   if (message.author.bot) return;
-//   if (!message.content.startsWith(prefix)) return;
-
-//   if (message.content.startsWith(`${prefix}play`)) {
-//     musicCore.play(message);
-//     return;
-//   } else if (message.content.startsWith(`${prefix}skip`)) {
-//     musicCore.skip(message);
-//     return;
-//   } else if (message.content.startsWith(`${prefix}stop`)) {
-//     musicCore.stop(message);
-//     return;
-//   } else {
-//     message.channel.send("You need to enter a valid command!");
-//   }
-// });
 
 client.login(token);
