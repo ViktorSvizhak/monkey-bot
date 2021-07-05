@@ -1,11 +1,12 @@
 const ytdl = require("ytdl-core");
 const serverQueueResolver = require("../modules/serverQueueResolver");
+const searcher = require("../modules/searcher");
 
 module.exports = {
     commands: 'play',
     expectedArgs: '<url>',
     minArgs: 1,
-    maxArgs: 1,
+    maxArgs: null,
     callback: async (message, arguments, text) => {
         const voiceChannel = message.member.voice.channel;
         if (!voiceChannel){
@@ -21,7 +22,24 @@ module.exports = {
             );
         }
         
-        const songInfo = await ytdl.getInfo(arguments[0]);
+        if (arguments.length == 1 &&
+            (ytdl.validateID(arguments[0]) || ytdl.validateURL(arguments[0]))) {
+            playSong(message, voiceChannel, arguments[0]);
+        } else {
+            searcher.searchVideosByParams(arguments, (result) => {
+                let firstSong = result.items[0].id.videoId;
+                playSong(message, voiceChannel, firstSong);
+            });
+        }
+
+        
+    },
+    permissions: [],
+    requiredRoles: [],
+}
+
+async function playSong(message, voiceChannel, songId) {
+    const songInfo = await ytdl.getInfo(songId);
         const song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
@@ -56,9 +74,6 @@ module.exports = {
             serverQueue.songs.push(song);
             return message.channel.send(`${song.title} has been added to the queue!`);
         }
-    },
-    permissions: [],
-    requiredRoles: [],
 }
 
 function play(guild, song) {
