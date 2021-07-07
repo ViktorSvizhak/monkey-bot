@@ -4,14 +4,17 @@ const servers = new Map();
 
 module.exports = {
     addSong: (message, song) => {
-        const serverQueue = servers.get(message.guild.id) ?? initServerQueue(message);
+        let serverQueue = servers.get(message.guild.id)
+        if (!serverQueue) {
+            serverQueue = initServerQueue(message);
+        }
         serverQueue.songs.push(song);
 
-        startPlaying(message.guild.id);
+        startPlaying(serverQueue);
     },
 
     skipSong: (message) => {
-        const serverQueue = serverQueueResolver.get(message.guild.id);
+        const serverQueue = servers.get(message.guild.id);
     
         try {
             serverQueue.connection.dispatcher.end();
@@ -23,7 +26,7 @@ module.exports = {
     },
 
     stopPlaying: (message) => {
-        const serverQueue = serverQueueResolver.get(message.guild);
+        const serverQueue = servers.get(message.guild);
             
         try {
             serverQueue.songs = [];
@@ -60,7 +63,7 @@ async function startPlaying(serverQueue) {
 
     try {
         serverQueue.playing = true;
-        serverQueue.connection = await queueContruct.voiceChannel.join();
+        serverQueue.connection = await serverQueue.voiceChannel.join();
     
         playLoop(serverQueue);
     } catch (ex) {
