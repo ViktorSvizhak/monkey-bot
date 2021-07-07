@@ -43,4 +43,16 @@ module.exports = class {
 
         return this;
     }
+
+    appendPartType(partType) {
+        if(this.partType)
+        {
+            return this;
+        }
+
+        this.partType = partType;
+        this.append('part', this.partType);
+
+        return this;
+    }
 }

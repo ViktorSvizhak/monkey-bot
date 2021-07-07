@@ -1,10 +1,10 @@
-const ytdl = require("ytdl-core");
-const serverQueueResolver = require("../modules/serverQueueResolver");
-const searcher = require("../modules/searcher");
+const ytdl = require('ytdl-core');
+const musicPlayer = require('../modules/musicPlayer');
+const searcher = require('../modules/searcher');
 
 module.exports = {
     commands: 'play',
-    expectedArgs: '<url>',
+    expectedArgs: '<search text>',
     minArgs: 1,
     maxArgs: null,
     callback: async (message, arguments, text) => {
@@ -22,76 +22,29 @@ module.exports = {
             );
         }
         
-        if (arguments.length == 1 &&
+        if (arguments.length == 1 && 
             (ytdl.validateID(arguments[0]) || ytdl.validateURL(arguments[0]))) {
-            playSong(message, voiceChannel, arguments[0]);
+            const songInfo = ytdl.getInfo(arguments[0]);
+            const song = createSong(songInfo.videoDetails.title, 
+                songInfo.videoDetails.video_url)
+
+            musicPlayer.addSong(message, song);
         } else {
             searcher.searchVideosByParams(arguments, (result) => {
-                let firstSong = result.items[0].id.videoId;
-                playSong(message, voiceChannel, firstSong);
+                const song = createSong(result.items[0].snippet.title,
+                    result.items[0].id.videoId);
+
+                musicPlayer.addSong(message, song)
             });
         }
-
-        
     },
     permissions: [],
     requiredRoles: [],
 }
 
-async function playSong(message, voiceChannel, songId) {
-    const songInfo = await ytdl.getInfo(songId);
-        const song = {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
-            };
-        
-        const serverQueue = serverQueueResolver.get(message.guild);
-    
-        if (!serverQueue) {
-            const queueContruct = {
-                textChannel: message.channel,
-                voiceChannel: voiceChannel,
-                connection: null,
-                songs: [],
-                volume: 5,
-                playing: true
-            };
-        
-            serverQueueResolver.set(message.guild, queueContruct);
-        
-            queueContruct.songs.push(song);
-        
-            try {
-                var connection = await voiceChannel.join();
-                queueContruct.connection = connection;
-                play(message.guild, queueContruct.songs[0]);
-            } catch (err) {
-                console.log(err);
-                serverQueueResolver.delete(message.guild);
-                return message.channel.send(err);
-            }
-        } else {
-            serverQueue.songs.push(song);
-            return message.channel.send(`${song.title} has been added to the queue!`);
-        }
-}
-
-function play(guild, song) {
-    serverQueue = serverQueueResolver.get(guild)
-
-    if (!song) {
-        serverQueue.voiceChannel.leave();
-        serverQueueResolver.delete(guild);
-        return;
-    }
-    
-    const dispatcher = serverQueue.connection
-        .play(ytdl(song.url))
-        .on("finish", () => {
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0]);
-        })
-        .on("error", error => console.error(error));
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+function createSong(title, url) {
+    return {
+        title: title,
+        url: url,
+    };
 }

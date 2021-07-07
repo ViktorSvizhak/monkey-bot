@@ -12,6 +12,7 @@ module.exports = {
             .appendToken()
             .appendParams(params)
             .appendType('video')
+            .appendPartType('snippet')
             .queryString;
 
         const options = createSearchGetRequest()
