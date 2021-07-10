@@ -15,7 +15,11 @@ module.exports = {
 
     skipSong: (message) => {
         const serverQueue = servers.get(message.guild.id);
-    
+
+        if (!serverQueue) {
+            return message.channel.send(`Nothing to **skip**`);
+        }
+
         try {
             serverQueue.connection.dispatcher.end();
 
@@ -26,8 +30,12 @@ module.exports = {
     },
 
     stopPlaying: (message) => {
-        const serverQueue = servers.get(message.guild);
+        const serverQueue = servers.get(message.guild.id);
             
+        if (!serverQueue) {
+            return message.channel.send(`Nothing to **stop**`);
+        }
+
         try {
             serverQueue.songs = [];
             serverQueue.connection.dispatcher.end();
