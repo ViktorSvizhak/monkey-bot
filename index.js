@@ -3,11 +3,11 @@ const fs = require('fs')
 const Discord = require("discord.js");
 const glitch = require("./modules/glitch");
 const logger = require('./modules/logger');
+const configuration = require('./configurations/configuration');
 
-const token = glitch.token;
 const client = new Discord.Client();
 
-glitch.start();
+glitch();
 
 client.once("ready", () => {
     const baseFile = 'command-base.js';
@@ -41,4 +41,4 @@ client.once('disconnect', () => {
     logger.info('Disconnect!')
 });
 
-client.login(token);
+client.login(configuration.botToken);

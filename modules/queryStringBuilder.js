@@ -1,3 +1,5 @@
+const configuration = require('../configurations/configuration');
+
 module.exports = class {
     constructor() {
         this.queryString = '?';
@@ -14,7 +16,7 @@ module.exports = class {
             return this;
         }
 
-        this.token = process.env.youtube_token;
+        this.token = configuration.youtubeToken;
         this.append('key', this.token);
 
         return this;
