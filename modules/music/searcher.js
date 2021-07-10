@@ -1,6 +1,6 @@
 const https = require('https');
-const logger = require('./logger');
-const queryStringBuilder = require('./queryStringBuilder');
+const logger = require('../infrastructure/logger');
+const queryStringBuilder = require('../common/queryStringBuilder');
 
 module.exports = {
     searchVideosByParams: (params, callback) => {

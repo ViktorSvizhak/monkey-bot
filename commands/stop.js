@@ -1,4 +1,4 @@
-const musicPlayer = require('../modules/musicPlayer');
+const musicPlayer = require('../modules/music/musicPlayer');
 
 module.exports = {
     commands: 'stop',

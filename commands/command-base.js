@@ -1,5 +1,5 @@
 const configuration = require('../configurations/configuration');
-const logger = require('../modules/logger');
+const logger = require('../modules/infrastructure/logger');
 
 module.exports = (client, commandOptions) => {
     let {

@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const logger = require('./logger');
+const logger = require('../infrastructure/logger');
 
 const servers = new Map();
 

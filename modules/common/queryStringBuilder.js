@@ -1,4 +1,4 @@
-const configuration = require('../configurations/configuration');
+const configuration = require('../../configurations/configuration');
 
 module.exports = class {
     constructor() {

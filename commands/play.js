@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
-const musicPlayer = require('../modules/musicPlayer');
-const searcher = require('../modules/searcher');
+const musicPlayer = require('../modules/music/musicPlayer');
+const searcher = require('../modules/music/searcher');
 
 module.exports = {
     commands: 'play',
