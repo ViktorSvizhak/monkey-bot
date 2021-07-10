@@ -1,4 +1,5 @@
 const https = require('https');
+const logger = require('./logger');
 const queryStringBuilder = require('./queryStringBuilder');
 
 module.exports = {
@@ -21,22 +22,19 @@ module.exports = {
         let data = '';
 
         const request = https.get(options, (response) => {
-            console.log(`statusCode: ${response.statusCode}`);
-          
             response.on('data', (chunk) => {
                 data += chunk;
             })
 
             response.on('end', () => {
                 const result = JSON.parse(data);
-                console.log('Request ended');
                 callback(result);
               });
             
         });
 
-        request.on('error', error => {
-            console.error(error)
+        request.on('error', ex => {
+            logger.error(ex, 'Failed to search song');
           })
           
         request.end();

@@ -1,4 +1,4 @@
-const searcher = require("../modules/searcher");
+const searcher = require('../modules/searcher');
 
 module.exports = {
     commands: 'search',

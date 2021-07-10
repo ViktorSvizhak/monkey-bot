@@ -1,4 +1,5 @@
 const { prefix } = require('../config.json');
+const logger = require('../modules/logger');
 
 const validatePermissions = (permissions) => {
     const validPermissions = [
@@ -59,7 +60,7 @@ module.exports = (client, commandOptions) => {
         commands = [commands];
     }
 
-    console.log(`Registering command "${commands[0]}"`);
+    logger.info(`Registering command "${commands[0]}"`);
 
     // Ensure the permissions are in an array and are all valid
     if (permissions.length) {
