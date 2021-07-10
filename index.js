@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const Discord = require("discord.js");
-const glitch = require("./modules/glitch")
+const glitch = require("./modules/glitch");
+const logger = require('./modules/logger');
 
 const token = glitch.token;
 const client = new Discord.Client();
@@ -9,8 +10,6 @@ const client = new Discord.Client();
 glitch.start();
 
 client.once("ready", () => {
-    console.log("Ready!");
-
     const baseFile = 'command-base.js';
     const commandBase = require(`./commands/${baseFile}`);
 
@@ -30,14 +29,16 @@ client.once("ready", () => {
     }
 
     readCommands('commands')
+
+    logger.info('Bot Ready!')
 });
 
-client.once("reconnecting", () => {
-    console.log("Reconnecting!");
+client.once('reconnecting', () => {
+    logger.info('Bot Reconnecting!')
 });
 
-client.once("disconnect", () => {
-    console.log("Disconnect!");
+client.once('disconnect', () => {
+    logger.info('Disconnect!')
 });
 
 client.login(token);

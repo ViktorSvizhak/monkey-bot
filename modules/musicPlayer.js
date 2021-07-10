@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const logger = require('./logger');
 
 const servers = new Map();
 
@@ -17,15 +18,15 @@ module.exports = {
         const serverQueue = servers.get(message.guild.id);
 
         if (!serverQueue) {
+            logger.warn(`Server queue with id ${message.guild.id} not found`);
             return message.channel.send(`Nothing to **skip**`);
         }
 
         try {
             serverQueue.connection.dispatcher.end();
-
             serverQueue.textChannel.send('Song skipped');
         } catch (ex) {
-            console.error(ex);
+            logger.error(ex, 'Failed skip song');
         }
     },
 
@@ -33,6 +34,7 @@ module.exports = {
         const serverQueue = servers.get(message.guild.id);
             
         if (!serverQueue) {
+            logger.warn(`Server queue with id ${message.guild.id} not found`);
             return message.channel.send(`Nothing to **stop**`);
         }
 
@@ -42,7 +44,7 @@ module.exports = {
 
             serverQueue.textChannel.send('Playing stopped');
         } catch (ex) {
-            console.error(ex);
+            logger.error(ex, 'Failed stop playing');
         }
     }
 }
@@ -59,7 +61,7 @@ function initServerQueue(message) {
 
     servers.set(message.guild.id, queueContruct);
 
-    console.log(`Creating new queue for ${message.guild.id}`);
+    logger.info(`Creating new queue for ${message.guild.id}`);
 
     return queueContruct;
 }
@@ -75,8 +77,8 @@ async function startPlaying(serverQueue) {
     
         playLoop(serverQueue);
     } catch (ex) {
-        console.error(ex);
-        return serverQueue.textChannel.send(ex);
+        logger.error(ex, 'failed to play song');
+        return serverQueue.textChannel.send(`Failed to play song`);
     }
 }
 
