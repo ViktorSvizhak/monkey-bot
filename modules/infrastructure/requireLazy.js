@@ -18,5 +18,5 @@ function getAbsolutePath(moduleName) {
     //remove symbols '/' and '.' from start of string
     moduleName = moduleName.replace(/^[\.\/]+/, '')
     
-    return `/app/${moduleName}`;
+    return `../../${moduleName}`;
 }
