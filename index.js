@@ -7,7 +7,7 @@ const configuration = require('./configurations/configuration');
 
 const client = new Discord.Client();
 
-glitch();
+//glitch();
 
 client.once("ready", () => {
     const baseFile = 'command-base.js';
