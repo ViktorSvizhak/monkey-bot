@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const logger = require('../infrastructure/logger');
+const logger = require('../common/logger');
 
 const servers = new Map();
 
@@ -23,7 +23,7 @@ module.exports = {
         }
 
         try {
-            serverQueue.connection.dispatcher.end();
+            serverQueue.connection.dispatcher?.end();
             serverQueue.textChannel.send('Song skipped');
         } catch (ex) {
             logger.error(ex, 'Failed skip song');
@@ -40,11 +40,21 @@ module.exports = {
 
         try {
             serverQueue.songs = [];
-            serverQueue.connection.dispatcher.end();
+            serverQueue.connection.dispatcher?.end();
 
             serverQueue.textChannel.send('Playing stopped');
         } catch (ex) {
             logger.error(ex, 'Failed stop playing');
+        }
+    },
+
+    abortConnection: (message) => {
+        const serverQueue = servers.get(message.guild.id);
+
+        if (serverQueue) {
+            serverQueue.connection?.dispatcher?.end();
+
+            servers.delete(message.guild.id);
         }
     }
 }

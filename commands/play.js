@@ -24,7 +24,7 @@ module.exports = {
         
         if (arguments.length == 1 && 
             (ytdl.validateID(arguments[0]) || ytdl.validateURL(arguments[0]))) {
-            const songInfo = ytdl.getInfo(arguments[0]);
+            const songInfo = await ytdl.getInfo(arguments[0]);
             const song = createSong(songInfo.videoDetails.title, 
                 songInfo.videoDetails.video_url)
 

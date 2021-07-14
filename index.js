@@ -1,14 +1,13 @@
 const path = require('path')
 const fs = require('fs')
 const Discord = require("discord.js");
-const glitch = require("./modules/infrastructure/glitch");
-const logger = require('./modules/infrastructure/logger');
+const logger = require('./modules/common/logger');
 const configuration = require('./configurations/configuration');
 
 const client = new Discord.Client();
 require('discord-buttons')(client);
 
-glitch();
+//glitch();
 
 //EventHandler
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
