@@ -30,7 +30,8 @@ module.exports = {
 
             musicPlayer.addSong(message, song);
         } else {
-            searcher.searchVideosByParams(arguments, (result) => {
+            searcher.searchVideosByParams(arguments, 1,
+                (result) => {
                 const song = createSong(result.items[0].snippet.title,
                     result.items[0].id.videoId);
 

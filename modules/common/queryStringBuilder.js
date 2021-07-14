@@ -57,4 +57,16 @@ module.exports = class {
 
         return this;
     }
+
+    appendMaxResults(maxResults) {
+        if(this.maxResults)
+        {
+            return this;
+        }
+
+        this.maxResults = maxResults;
+        this.append('maxResults', this.maxResults);
+
+        return this;
+    }
 }

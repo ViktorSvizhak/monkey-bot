@@ -6,39 +6,42 @@ const logger = require('./modules/infrastructure/logger');
 const configuration = require('./configurations/configuration');
 
 const client = new Discord.Client();
+require('discord-buttons')(client);
 
 glitch();
 
-client.once("ready", () => {
-    const baseFile = 'command-base.js';
-    const commandBase = require(`./commands/${baseFile}`);
+//EventHandler
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
-    const readCommands = (dir) => {
-        const files = fs.readdirSync(path.join(__dirname, dir));
+for (const file of eventFiles) {
+ 	const event = require(`./events/${file}`);
 
-        for (const file of files) {
-            const stat = fs.lstatSync(path.join(__dirname, dir, file));
+ 	if (event.once) {
+ 		client.once(event.name, (...args) => event.callback(...args));
+ 	} else {
+ 		client.on(event.name, (...args) => event.callback(...args));
+ 	}
+}
 
-            if (stat.isDirectory()) {
-                readCommands(path.join(dir, file));
-            } else if (file !== baseFile) {
-                const option = require(path.join(__dirname, dir, file));
-                commandBase(client, option);
-            }
-        }
-    }
+//CommandHandler
+const baseFile = 'command-base.js';
+const commandBase = require(`./commands/${baseFile}`);
 
-    readCommands('commands')
+const readCommands = (dir) => {
+	const files = fs.readdirSync(path.join(__dirname, dir));
 
-    logger.info('Bot Ready!')
-});
+	for (const file of files) {
+		const stat = fs.lstatSync(path.join(__dirname, dir, file));
 
-client.once('reconnecting', () => {
-    logger.info('Bot Reconnecting!')
-});
+		if (stat.isDirectory()) {
+			readCommands(path.join(dir, file));
+		} else if (file !== baseFile) {
+			const option = require(path.join(__dirname, dir, file));
+			commandBase(client, option);
+		}
+	}
+}
 
-client.once('disconnect', () => {
-    logger.info('Disconnect!')
-});
+readCommands('./commands')
 
 client.login(configuration.botToken);
