@@ -1,5 +1,5 @@
 const https = require('https');
-const logger = require('../infrastructure/logger');
+const logger = require('../common/logger');
 const queryStringBuilder = require('../common/queryStringBuilder');
 
 module.exports = {

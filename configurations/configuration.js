@@ -1,4 +1,4 @@
-const requireLazy = require('../modules/infrastructure/requireLazy');
+const requireLazy = require('../modules/common/requireLazy');
 const fileConfig = requireLazy('/configurations/config.json');
 
 module.exports = {
