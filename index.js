@@ -1,13 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const Discord = require("discord.js");
-const glitch = require("./modules/infrastructure/glitch");
-const logger = require('./modules/infrastructure/logger');
+const logger = require('./modules/common/logger');
 const configuration = require('./configurations/configuration');
 
 const client = new Discord.Client();
 
-glitch();
+//glitch();
 
 client.once("ready", () => {
     const baseFile = 'command-base.js';

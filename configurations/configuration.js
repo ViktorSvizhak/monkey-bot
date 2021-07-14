@@ -1,5 +1,5 @@
-const requireLazy = require('../modules/infrastructure/requireLazy');
-const fileConfig = requireLazy('/configuration/config.json');
+const requireLazy = require('../modules/common/requireLazy');
+const fileConfig = requireLazy('/configurations/config.json');
 
 module.exports = {
     prefix: process?.env?.bot_prefix 
