@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const musicPlayer = require('../modules/music/musicPlayer');
+const songInfo = require('../modules/music/songInfo');
 
 module.exports = {
     prefix: 'play',
@@ -18,11 +19,12 @@ module.exports = {
             );
         }
 
-        const song = {
-            title: button.message.embeds[0].fields[index].name.substring(3),
-            url: songId
-        }
+        const song = new songInfo(button.message.embeds[0].fields[index].name.substring(3), songId);
         
-        musicPlayer.addSong(button.message, song);
+        musicPlayer.addSong(
+            button.message.guild.id, 
+            song, 
+            button.clicker.member.voice.channel, 
+            button.message.channel);
     }
 }

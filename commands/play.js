@@ -1,6 +1,7 @@
 const ytdl = require('ytdl-core');
 const musicPlayer = require('../modules/music/musicPlayer');
 const searcher = require('../modules/music/searcher');
+const songInfo = require('../modules/music/songInfo');
 
 module.exports = {
     commands: 'play',
@@ -24,28 +25,29 @@ module.exports = {
         
         if (arguments.length == 1 && 
             (ytdl.validateID(arguments[0]) || ytdl.validateURL(arguments[0]))) {
-            const songInfo = await ytdl.getInfo(arguments[0]);
-            const song = createSong(songInfo.videoDetails.title, 
-                songInfo.videoDetails.video_url)
+            const ytdlSongInfo = await ytdl.getInfo(arguments[0]);
+            const song = new songInfo(ytdlSongInfo.videoDetails.title, 
+                ytdlSongInfo.videoDetails.video_url);
 
-            musicPlayer.addSong(message, song);
+            musicPlayer.addSong(
+                message.guild.id, 
+                song, 
+                message.member.voice.channel, 
+                message.channel);
         } else {
             searcher.searchVideosByParams(arguments, 1,
                 (result) => {
-                const song = createSong(result.items[0].snippet.title,
+                const song = new songInfo(result.items[0].snippet.title,
                     result.items[0].id.videoId);
 
-                musicPlayer.addSong(message, song)
+                    musicPlayer.addSong(
+                        message.guild.id, 
+                        song, 
+                        message.member.voice.channel, 
+                        message.channel);
             });
         }
     },
     permissions: [],
     requiredRoles: [],
-}
-
-function createSong(title, url) {
-    return {
-        title: title,
-        url: url,
-    };
 }
