@@ -1,10 +1,9 @@
 const ytdl = require('ytdl-core');
-const cache = require('../modules/common/cache');
 const musicPlayer = require('../modules/music/musicPlayer');
 
 module.exports = {
-    prefix: 'play_',
-    callback: async (button, params) => {
+    prefix: 'play',
+    callback: async (button, index, songId) => {
         const voiceChannel = button.clicker.member.voice.channel;
         if (!voiceChannel){
             return button.message.channel.send(
@@ -19,22 +18,11 @@ module.exports = {
             );
         }
 
-        const song = getSongInfo(params);
+        const song = {
+            title: button.message.embeds[0].fields[index].name.substring(3),
+            url: songId
+        }
         
         musicPlayer.addSong(button.message, song);
     }
-}
-
-async function getSongInfo(songId) {
-    const cachedSong = cache.get(songId);
-
-    if (cachedSong) {
-        return cachedSong
-    }
-
-    const songInfo = await ytdl.getInfo(songId);
-    return {
-        title: songInfo.videoDetails.title,
-        url: songInfo.videoDetails.video_url,
-    };
 }

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const logger = require('../modules/infrastructure/logger');
+const logger = require('../modules/common/logger');
 
 const buttons = [];
 const buttonFiles = fs.readdirSync('./buttons').filter(file => file.endsWith('.js'));
@@ -12,12 +12,10 @@ module.exports = {
 	name: 'clickButton',
 	once: false,
 	callback: async (button) => {
-        const foundButtons = buttons.filter(b => button.id.startsWith(b.prefix));
-
-        if (foundButtons.length != 1) {
-            logger.warn(`Action for button ${button.id} not found. Found ${foundButtons.length} events`);
-        }
-
-        foundButtons[0].callback(button, button.id.substring(foundButtons[0].prefix.length));
+        const args = button.id.split(' ');
+        const command = args.shift();
+        buttons.filter(b => command == b.prefix)
+            .forEach(element => element.callback(button, ...args));
+        return true;
     }
 };

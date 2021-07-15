@@ -7,8 +7,6 @@ const configuration = require('./configurations/configuration');
 const client = new Discord.Client();
 require('discord-buttons')(client);
 
-//glitch();
-
 //EventHandler
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
