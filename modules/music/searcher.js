@@ -3,7 +3,7 @@ const logger = require('../common/logger');
 const queryStringBuilder = require('../common/queryStringBuilder');
 
 module.exports = {
-    searchVideosByParams: (params, callback) => {
+    searchVideosByParams: (params, songsCount, callback) => {
         if (Array.isArray(params))
         {
             params = params.join(' ');
@@ -14,6 +14,7 @@ module.exports = {
             .appendParams(params)
             .appendType('video')
             .appendPartType('snippet')
+            .appendMaxResults(songsCount)
             .queryString;
 
         const options = createSearchGetRequest()

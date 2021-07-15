@@ -18,5 +18,6 @@ function getAbsolutePath(moduleName) {
     //remove symbols '/' and '.' from start of string
     moduleName = moduleName.replace(/^[\.\/]+/, '')
     
+    //modules load from 'lazyModule.js' file location 
     return `../../${moduleName}`;
 }

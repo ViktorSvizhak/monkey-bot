@@ -4,43 +4,45 @@ const logger = require('../common/logger');
 const servers = new Map();
 
 module.exports = {
-    addSong: (message, song) => {
-        let serverQueue = servers.get(message.guild.id)
+    addSong: (serverId, song, voiceChannel, textChannel) => {
+        let serverQueue = servers.get(serverId)
         if (!serverQueue) {
-            serverQueue = initServerQueue(message);
+            serverQueue = initServerQueue(serverId, voiceChannel, textChannel);
+        } else {
+            serverQueue.textChannel.send(`Song **${song.title}** added to queue`);
         }
         serverQueue.songs.push(song);
 
         startPlaying(serverQueue);
     },
 
-    skipSong: (message) => {
-        const serverQueue = servers.get(message.guild.id);
+    skipSong: (serverId) => {
+        const serverQueue = servers.get(serverId);
 
         if (!serverQueue) {
-            logger.warn(`Server queue with id ${message.guild.id} not found`);
-            return message.channel.send(`Nothing to **skip**`);
+            logger.warn(`Server queue with id ${serverId} not found`);
+            return;
         }
 
         try {
-            serverQueue.connection.dispatcher?.end();
+            serverQueue.connection?.dispatcher?.end();
             serverQueue.textChannel.send('Song skipped');
         } catch (ex) {
             logger.error(ex, 'Failed skip song');
         }
     },
 
-    stopPlaying: (message) => {
-        const serverQueue = servers.get(message.guild.id);
+    stopPlaying: (serverId) => {
+        const serverQueue = servers.get(serverId);
             
         if (!serverQueue) {
-            logger.warn(`Server queue with id ${message.guild.id} not found`);
-            return message.channel.send(`Nothing to **stop**`);
+            logger.warn(`Server queue with id ${serverId} not found`);
+            return;
         }
 
         try {
             serverQueue.songs = [];
-            serverQueue.connection.dispatcher?.end();
+            serverQueue.connection?.dispatcher?.end();
 
             serverQueue.textChannel.send('Playing stopped');
         } catch (ex) {
@@ -48,30 +50,30 @@ module.exports = {
         }
     },
 
-    abortConnection: (message) => {
-        const serverQueue = servers.get(message.guild.id);
+    abortConnection: (serverId) => {
+        const serverQueue = servers.get(serverId);
 
         if (serverQueue) {
             serverQueue.connection?.dispatcher?.end();
 
-            servers.delete(message.guild.id);
+            servers.delete(serverId);
         }
     }
 }
 
-function initServerQueue(message) {
+function initServerQueue(serverId, voiceChannel, textChannel) {
     const queueContruct = {
-        textChannel: message.channel,
-        voiceChannel: message.member.voice.channel,
+        textChannel: textChannel,
+        voiceChannel: voiceChannel,
         connection: null,
         songs: [],
         volume: 5,
         playing: false
     };
 
-    servers.set(message.guild.id, queueContruct);
+    servers.set(serverId, queueContruct);
 
-    logger.info(`Creating new queue for ${message.guild.id}`);
+    logger.info(`Creating new queue for ${serverId}`);
 
     return queueContruct;
 }

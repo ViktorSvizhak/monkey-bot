@@ -9,7 +9,7 @@ module.exports = {
             );
         }
         
-        musicPlayer.stopPlaying(message);
+        musicPlayer.stopPlaying(message.guild.id);
     },
     permissions: [],
     requiredRoles: [],
