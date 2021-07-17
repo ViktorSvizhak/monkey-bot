@@ -8,7 +8,7 @@ module.exports = {
     expectedArgs: '<search text>',
     minArgs: 1,
     maxArgs: null,
-    callback: async (message, arguments, text) => {
+    callback: async (message, arguments) => {
         const voiceChannel = message.member.voice.channel;
         if (!voiceChannel){
             return message.channel.send(
