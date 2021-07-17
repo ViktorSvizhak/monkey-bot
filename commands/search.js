@@ -7,7 +7,7 @@ module.exports = {
     expectedArgs: '<search text>',
     minArgs: 1,
     maxArgs: null,
-    callback: (message, arguments, text) => {
+    callback: (message, arguments) => {
         searcher.searchVideosByParams(arguments, 5,
             (result) => {
                 let row = new MessageActionRow();

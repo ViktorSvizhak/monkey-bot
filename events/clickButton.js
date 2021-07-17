@@ -1,12 +1,8 @@
 const fs = require('fs');
 const logger = require('../modules/common/logger');
+const moduleLoader = require('../initializators/moduleLoader');
 
-const buttons = [];
-const buttonFiles = fs.readdirSync('./buttons').filter(file => file.endsWith('.js'));
-for (const file of buttonFiles) {
-    const button = require(`../buttons/${file}`);
-    buttons.push(button);
-}
+const buttons = moduleLoader('../buttons');
 
 module.exports = {
 	name: 'clickButton',
@@ -16,6 +12,5 @@ module.exports = {
         const command = args.shift();
         buttons.filter(b => command == b.prefix)
             .forEach(element => element.callback(button, ...args));
-        return true;
     }
 };
