@@ -43,7 +43,7 @@ module.exports = {
 
         if (arguments.length < command.minArgs || (command.maxArgs !== null && arguments.length > command.maxArgs)) {
             message.reply(
-                `Incorrect syntax! Use ${configuration.prefix}${alias} ${expectedArgs}`
+                `Incorrect syntax! Use ${configuration.prefix}${command.commands[0]} ${command.expectedArgs}`
             );
             return;
         }
