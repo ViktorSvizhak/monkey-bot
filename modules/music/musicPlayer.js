@@ -110,7 +110,7 @@ function playLoop(serverQueue) {
             playLoop(serverQueue);
         })
         .on('error', (error) => {
-            console.error(error)
+            logger.error(error, "Failed to play song")
         });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
