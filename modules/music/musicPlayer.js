@@ -58,6 +58,11 @@ module.exports = {
 
             servers.delete(serverId);
         }
+    },
+
+    getCurrentSong: (serverId) => {
+        const serverQueue = servers.get(serverId);
+        return serverQueue?.currentSong;
     }
 }
 
@@ -68,7 +73,8 @@ function initServerQueue(serverId, voiceChannel, textChannel) {
         connection: null,
         songs: [],
         volume: 5,
-        playing: false
+        playing: false,
+        currentSong: null
     };
 
     servers.set(serverId, queueContruct);
@@ -100,13 +106,15 @@ function playLoop(serverQueue) {
     if (!song) {
         serverQueue.voiceChannel.leave();
         serverQueue.playing = false;
-
         return;
     }
     
+    serverQueue.currentSong = song;
+
     const dispatcher = serverQueue.connection
         .play(ytdl(song.url, { filter: 'audioonly' }))
         .on('finish', () => {
+            serverQueue.currentSong = null;
             playLoop(serverQueue);
         })
         .on('error', (error) => {
