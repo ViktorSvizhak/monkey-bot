@@ -29,7 +29,7 @@ module.exports = {
             const song = new songInfo(ytdlSongInfo.videoDetails.title, 
                 ytdlSongInfo.videoDetails.video_url);
 
-            musicPlayer.addSong(
+            musicPlayer.addSingleSong(
                 message.guild.id, 
                 song, 
                 message.member.voice.channel, 
@@ -40,7 +40,7 @@ module.exports = {
                 const song = new songInfo(result.items[0].snippet.title,
                     result.items[0].id.videoId);
 
-                    musicPlayer.addSong(
+                    musicPlayer.addSingleSong(
                         message.guild.id, 
                         song, 
                         message.member.voice.channel, 

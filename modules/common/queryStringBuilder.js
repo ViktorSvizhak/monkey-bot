@@ -1,8 +1,8 @@
 const configuration = require('../../configurations/configuration');
 
 module.exports = class {
-    constructor() {
-        this.queryString = '?';
+    constructor(endpoint) {
+        this.queryString = `${endpoint}?`;
         this.paramsCount = 0;
     }
 
@@ -10,14 +10,14 @@ module.exports = class {
         this.queryString += `${this.paramsCount++ === 0 ? '' : '&'}${key}=${value}`;
     }
 
-    appendToken() {
-        if(this.token)
+    appendYoutubeToken() {
+        if(this.key)
         {
             return this;
         }
 
-        this.token = configuration.youtubeToken;
-        this.append('key', this.token);
+        this.key = configuration.youtubeToken;
+        this.append('key', this.key);
 
         return this;
     }
@@ -66,6 +66,30 @@ module.exports = class {
 
         this.maxResults = maxResults;
         this.append('maxResults', this.maxResults);
+
+        return this;
+    }
+
+    appendPlaylistId(playlistId) {
+        if(this.playlistId)
+        {
+            return this;
+        }
+
+        this.playlistId = playlistId;
+        this.append('playlistId', this.playlistId);
+
+        return this;
+    }
+
+    appendPageToken(pageToken) {
+        if(this.pageToken)
+        {
+            return this;
+        }
+
+        this.pageToken = pageToken;
+        this.append('pageToken', this.pageToken);
 
         return this;
     }
