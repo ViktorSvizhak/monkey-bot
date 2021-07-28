@@ -77,6 +77,19 @@ module.exports = {
     getCurrentSong: (serverId) => {
         const serverQueue = servers.get(serverId);
         return serverQueue?.currentSong;
+    },
+
+    getAllSongs: (serverId) => {
+        const serverQueue = servers.get(serverId);
+
+        if (!serverQueue) {
+            return;
+        }
+
+        const songs = serverQueue.songs;
+        songs.unshift(serverQueue.currentSong);
+        
+        return songs;
     }
 }
 
