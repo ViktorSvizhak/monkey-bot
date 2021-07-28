@@ -24,7 +24,7 @@ module.exports = {
         
         songs.forEach(element => {
             serverQueue.songs.push(element);
-            serverQueue.textChannel.send(`Song **${element.title}** added to queue`);
+            //serverQueue.textChannel.send(`Song **${element.title}** added to queue`);
         })
 
         startPlaying(serverQueue);

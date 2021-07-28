@@ -1,13 +1,12 @@
 const configuration = require('../../configurations/configuration');
 
 module.exports = class {
-    constructor(endpoint) {
-        this.queryString = `${endpoint}?`;
-        this.paramsCount = 0;
+    constructor() {
+        this.queryString = '';
     }
 
     append(key, value) {
-        this.queryString += `${this.paramsCount++ === 0 ? '' : '&'}${key}=${value}`;
+        this.queryString += `&${key}=${value}`;
     }
 
     appendYoutubeToken() {
@@ -92,5 +91,10 @@ module.exports = class {
         this.append('pageToken', this.pageToken);
 
         return this;
+    }
+
+    getQueryString() {
+        //remove first '&' char
+        return this.queryString.substring(1);
     }
 }

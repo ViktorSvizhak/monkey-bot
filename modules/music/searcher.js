@@ -9,16 +9,15 @@ module.exports = {
             params = params.join(' ');
         } 
 
-        const queryString = new queryStringBuilder('search')
+        const queryString = new queryStringBuilder()
             .appendYoutubeToken()
             .appendParams(params)
             .appendType('video')
             .appendPartType('snippet')
             .appendMaxResults(songsCount)
-            .queryString;
+            .getQueryString();
 
-        const options = createSearchGetRequest()
-        options.path += queryString;
+        const options = createSearchGetRequest('search', queryString)
 
         let data = '';
 
@@ -47,16 +46,15 @@ module.exports = {
             params = params.join(' ');
         } 
 
-        const queryString = new queryStringBuilder('search')
+        const queryString = new queryStringBuilder()
             .appendYoutubeToken()
             .appendParams(params)
             .appendType('playlist')
             .appendPartType('snippet')
             .appendMaxResults(playlistsCount)
-            .queryString;
+            .getQueryString();
 
-        const options = createSearchGetRequest()
-        options.path += queryString;
+        const options = createSearchGetRequest('search', queryString)
 
         let data = '';
 
@@ -80,7 +78,7 @@ module.exports = {
     },
 
     getPlaylistItems: (playlistId, nextPageToken, callback) => {
-        const _queryStringBuilder = new queryStringBuilder('playlistItems')
+        const _queryStringBuilder = new queryStringBuilder()
             .appendYoutubeToken()
             .appendPartType('snippet')
             .appendPlaylistId(playlistId);
@@ -89,8 +87,7 @@ module.exports = {
             _queryStringBuilder.appendPageToken(nextPageToken);
         }
 
-        const options = createSearchGetRequest()
-        options.path += _queryStringBuilder.queryString;
+        const options = createSearchGetRequest('playlistItems', _queryStringBuilder.getQueryString());
 
         let data = '';
 
@@ -114,10 +111,10 @@ module.exports = {
     }
 }
 
-function createSearchGetRequest() {
+function createSearchGetRequest(endpoint, queryString) {
     return {
         hostname: 'youtube.googleapis.com',
-        path: '/youtube/v3/',
+        path: `/youtube/v3/${endpoint}?${queryString}`,
         method: 'GET'
     };
 }
