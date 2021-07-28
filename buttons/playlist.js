@@ -5,8 +5,8 @@ const searcher = require('../modules/music/searcher');
 
 module.exports = {
     prefix: 'playlist',
-    callback: async (button, playlistId) => {
-        const voiceChannel = button.clicker.member.voice.channel;
+    callback: (button, playlistId) => {
+        const voiceChannel = button.clicker.member?.voice?.channel;
         if (!voiceChannel){
             return button.message.channel.send(
                 'You need to be in a voice channel to play music!'
@@ -21,6 +21,8 @@ module.exports = {
         }
 
         searchPlaylistItems(button, playlistId);
+
+        button.reply.defer();
     }
 }
 

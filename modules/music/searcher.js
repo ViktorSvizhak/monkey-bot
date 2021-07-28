@@ -40,21 +40,24 @@ module.exports = {
         request.end();
     },
 
-    searchPlaylistsByParams: (params, playlistsCount, callback) => {
+    searchPlaylistsByParams: (params, playlistsCount, nextPageToken, callback) => {
         if (Array.isArray(params))
         {
             params = params.join(' ');
         } 
 
-        const queryString = new queryStringBuilder()
+        const _queryStringBuilder = new queryStringBuilder()
             .appendYoutubeToken()
             .appendParams(params)
             .appendType('playlist')
             .appendPartType('snippet')
-            .appendMaxResults(playlistsCount)
-            .getQueryString();
+            .appendMaxResults(playlistsCount);
 
-        const options = createSearchGetRequest('search', queryString)
+        if(nextPageToken) {
+            _queryStringBuilder.appendPageToken(nextPageToken);
+        }
+
+        const options = createSearchGetRequest('search', _queryStringBuilder.getQueryString())
 
         let data = '';
 

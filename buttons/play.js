@@ -26,5 +26,7 @@ module.exports = {
             song, 
             button.clicker.member.voice.channel, 
             button.message.channel);
+        
+        button.reply.defer();
     }
 }

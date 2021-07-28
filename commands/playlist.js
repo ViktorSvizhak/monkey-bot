@@ -1,6 +1,7 @@
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 const { MessageEmbed } = require('discord.js');
 const searcher = require('../modules/music/searcher');
+const playlistEmbed = require('../modules/embed/playlistEmbed');
 
 module.exports = {
     commands: 'playlist',
@@ -8,26 +9,17 @@ module.exports = {
     minArgs: 1,
     maxArgs: null,
     callback: (message, arguments) => {
-        searcher.searchPlaylistsByParams(arguments, 5,
-            (result) => {
-                let row = new MessageActionRow();
-                let index = 0;
-
-                const embed = new MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle('Search results')
-                    .setAuthor(message.author.username, message.author.avatarURL())
-                    .setTimestamp()
-
-                    result.items.forEach(element => {
-                        row.addComponent(new MessageButton()
-                            .setStyle('blurple')
-                            .setID(`playlist ${element.id.playlistId}`)
-                            .setLabel(`Play ${++index}`));
-                        embed.addField(`${index}. ${element.snippet.title}`, `Channel: ${element.snippet.channelTitle}`, false);
-                });
-
-                message.channel.send(embed, row);
+        const params = arguments.join(' ');
+        searcher.searchPlaylistsByParams(params, 1, null,
+            (resultPlaylist) => {
+                const playlist = resultPlaylist.items[0];
+                searcher.getPlaylistItems(playlist.id.playlistId, null, 
+                    (resultPlaylistItems) => {
+                        const embed = playlistEmbed.createPlaylistEmbed(resultPlaylist, resultPlaylistItems);
+                        const buttons = playlistEmbed.createPlaylistButtons(resultPlaylist, params);
+                        
+                        message.channel.send(embed, buttons);
+                    })
         });
     },
     permissions: [],
