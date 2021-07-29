@@ -8,14 +8,14 @@ module.exports = {
     callback: (button, playlistId) => {
         const voiceChannel = button.clicker.member?.voice?.channel;
         if (!voiceChannel){
-            return button.message.channel.send(
+            return button.reply.send(
                 'You need to be in a voice channel to play music!'
             );
         }
 
         const permissions = voiceChannel.permissionsFor(button.message.client.user);
         if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-            return button.message.channel.send(
+            return button.reply.send(
                 'I need the permissions to join and speak in your voice channel!'
             );
         }
