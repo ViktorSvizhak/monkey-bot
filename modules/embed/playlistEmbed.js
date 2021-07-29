@@ -4,20 +4,21 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     createPlaylistEmbed: (responsePlaylist, responsePlaylistItems) => {
         const playlist = responsePlaylist.items[0];
+        
+        let index = 0;
+        let list = ''
 
-        const embed = new MessageEmbed()
+        responsePlaylistItems.items.forEach(element => {
+            list += `${++index}. ${element.snippet.title}\n`;
+        })
+
+        return new MessageEmbed()
             .setColor('#0099ff')
             .setTitle(playlist.snippet.title)
             .setImage(playlist.snippet.thumbnails.default.url)
-            .setTimestamp();
-        
-        let index = 0;
-
-        responsePlaylistItems.items.forEach(element => {
-            embed.addField(`${++index}. ${element.snippet.title}`, `Channel: ${element.snippet.channelTitle}`, false);
-        })
-
-        return embed;
+            .setFooter(`Total in playlist ${responsePlaylistItems.pageInfo.totalResults} songs`)
+            .setTimestamp()
+            .addField(`First ${responsePlaylistItems.pageInfo.resultsPerPage} songs in the playlist`, list, false);
     },
 
     createPlaylistButtons: (responsePlaylist, searchAttributes) => {
