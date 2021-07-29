@@ -4,7 +4,7 @@ const logger = require('../common/logger');
 const servers = new Map();
 
 module.exports = {
-    addSong: (serverId, song, voiceChannel, textChannel) => {
+    addSingleSong: (serverId, song, voiceChannel, textChannel) => {
         let serverQueue = servers.get(serverId)
         if (!serverQueue) {
             serverQueue = initServerQueue(serverId, voiceChannel, textChannel);
@@ -12,6 +12,20 @@ module.exports = {
             serverQueue.textChannel.send(`Song **${song.title}** added to queue`);
         }
         serverQueue.songs.push(song);
+
+        startPlaying(serverQueue);
+    },
+
+    addBatchSongs: (serverId, songs, voiceChannel, textChannel) => {
+        let serverQueue = servers.get(serverId)
+        if (!serverQueue) {
+            serverQueue = initServerQueue(serverId, voiceChannel, textChannel);
+        }
+        
+        songs.forEach(element => {
+            serverQueue.songs.push(element);
+            //serverQueue.textChannel.send(`Song **${element.title}** added to queue`);
+        })
 
         startPlaying(serverQueue);
     },
@@ -63,6 +77,19 @@ module.exports = {
     getCurrentSong: (serverId) => {
         const serverQueue = servers.get(serverId);
         return serverQueue?.currentSong;
+    },
+
+    getAllSongs: (serverId) => {
+        const serverQueue = servers.get(serverId);
+
+        if (!serverQueue) {
+            return;
+        }
+
+        const songs = serverQueue.songs;
+        songs.unshift(serverQueue.currentSong);
+        
+        return songs;
     }
 }
 

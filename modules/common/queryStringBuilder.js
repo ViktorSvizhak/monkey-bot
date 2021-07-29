@@ -2,22 +2,21 @@ const configuration = require('../../configurations/configuration');
 
 module.exports = class {
     constructor() {
-        this.queryString = '?';
-        this.paramsCount = 0;
+        this.queryString = '';
     }
 
     append(key, value) {
-        this.queryString += `${this.paramsCount++ === 0 ? '' : '&'}${key}=${value}`;
+        this.queryString += `&${key}=${value}`;
     }
 
-    appendToken() {
-        if(this.token)
+    appendYoutubeToken() {
+        if(this.key)
         {
             return this;
         }
 
-        this.token = configuration.youtubeToken;
-        this.append('key', this.token);
+        this.key = configuration.youtubeToken;
+        this.append('key', this.key);
 
         return this;
     }
@@ -68,5 +67,34 @@ module.exports = class {
         this.append('maxResults', this.maxResults);
 
         return this;
+    }
+
+    appendPlaylistId(playlistId) {
+        if(this.playlistId)
+        {
+            return this;
+        }
+
+        this.playlistId = playlistId;
+        this.append('playlistId', this.playlistId);
+
+        return this;
+    }
+
+    appendPageToken(pageToken) {
+        if(this.pageToken)
+        {
+            return this;
+        }
+
+        this.pageToken = pageToken;
+        this.append('pageToken', this.pageToken);
+
+        return this;
+    }
+
+    getQueryString() {
+        //remove first '&' char
+        return this.queryString.substring(1);
     }
 }

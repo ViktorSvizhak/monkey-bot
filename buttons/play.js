@@ -21,10 +21,12 @@ module.exports = {
 
         const song = new songInfo(button.message.embeds[0].fields[index].name.substring(3), songId);
         
-        musicPlayer.addSong(
+        musicPlayer.addSingleSong(
             button.message.guild.id, 
             song, 
             button.clicker.member.voice.channel, 
             button.message.channel);
+        
+        button.reply.defer();
     }
 }
