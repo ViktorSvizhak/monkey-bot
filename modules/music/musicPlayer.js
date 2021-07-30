@@ -86,10 +86,7 @@ module.exports = {
             return;
         }
 
-        const songs = serverQueue.songs;
-        songs.unshift(serverQueue.currentSong);
-        
-        return songs;
+        return [serverQueue.currentSong, ...serverQueue.songs];
     }
 }
 
