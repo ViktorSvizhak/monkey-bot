@@ -1,14 +1,14 @@
-const { MessageButton, MessageActionRow } = require("discord-buttons");
+const { MessageButton } = require("discord-buttons");
 const { MessageEmbed } = require('discord.js');
 
 module.exports = (responsePlaylist, responsePlaylistItems, searchAttributes) => {
     return {
-        embed: createPlaylistEmbed(responsePlaylist, responsePlaylistItems),
-        buttons: createPlaylistButtons(responsePlaylist, searchAttributes)
+        embed: createEmbed(responsePlaylist, responsePlaylistItems),
+        buttons: createButtons(responsePlaylist, searchAttributes)
     };
 }
 
-function createPlaylistEmbed(responsePlaylist, responsePlaylistItems) {
+function createEmbed(responsePlaylist, responsePlaylistItems) {
     const playlist = responsePlaylist.items[0];
     
     let index = 0;
@@ -27,7 +27,7 @@ function createPlaylistEmbed(responsePlaylist, responsePlaylistItems) {
         .addField(`First ${responsePlaylistItems.pageInfo.resultsPerPage} songs in the playlist`, list, false);
 }
 
-function createPlaylistButtons(responsePlaylist, searchAttributes) {
+function createButtons(responsePlaylist, searchAttributes) {
     const previousPageButton = new MessageButton()
         .setStyle('gray')
         .setID(`playlistPage ${responsePlaylist.prevPageToken} ${searchAttributes}`)

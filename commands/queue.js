@@ -12,7 +12,7 @@ module.exports = {
             return message.channel.send("No songs in the queue");
         }
 
-        return message.channel.send(queueEmbed.createEmbed(queueInfo));
+        return message.channel.send(queueEmbed(queueInfo));
     },
     permissions: [],
     requiredRoles: [],
