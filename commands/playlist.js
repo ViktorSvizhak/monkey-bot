@@ -15,10 +15,7 @@ module.exports = {
                 const playlist = resultPlaylist.items[0];
                 searcher.getPlaylistItems(playlist.id.playlistId, null, 
                     (resultPlaylistItems) => {
-                        const embed = playlistEmbed.createPlaylistEmbed(resultPlaylist, resultPlaylistItems);
-                        const buttons = playlistEmbed.createPlaylistButtons(resultPlaylist, params);
-                        
-                        message.channel.send(embed, buttons);
+                        message.channel.send(playlistEmbed(resultPlaylist, resultPlaylistItems, params));
                     })
         });
     },

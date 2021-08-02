@@ -1,45 +1,49 @@
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 const { MessageEmbed } = require('discord.js');
 
-module.exports = {
-    createPlaylistEmbed: (responsePlaylist, responsePlaylistItems) => {
-        const playlist = responsePlaylist.items[0];
-        
-        let index = 0;
-        let list = ''
+module.exports = (responsePlaylist, responsePlaylistItems, searchAttributes) => {
+    return {
+        embed: createPlaylistEmbed(responsePlaylist, responsePlaylistItems),
+        buttons: createPlaylistButtons(responsePlaylist, searchAttributes)
+    };
+}
 
-        responsePlaylistItems.items.forEach(element => {
-            list += `${++index}. ${element.snippet.title}\n`;
-        })
+function createPlaylistEmbed(responsePlaylist, responsePlaylistItems) {
+    const playlist = responsePlaylist.items[0];
+    
+    let index = 0;
+    let list = ''
 
-        return new MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(playlist.snippet.title)
-            .setImage(playlist.snippet.thumbnails.default.url)
-            .setFooter(`Total in playlist ${responsePlaylistItems.pageInfo.totalResults} songs`)
-            .setTimestamp()
-            .addField(`First ${responsePlaylistItems.pageInfo.resultsPerPage} songs in the playlist`, list, false);
-    },
+    responsePlaylistItems.items.forEach(element => {
+        list += `${++index}. ${element.snippet.title}\n`;
+    })
 
-    createPlaylistButtons: (responsePlaylist, searchAttributes) => {
-        const previousPageButton = new MessageButton()
-            .setStyle('gray')
-            .setID(`playlistPage ${responsePlaylist.prevPageToken} ${searchAttributes}`)
-            .setLabel(`Previous page`)
-            .setDisabled(!responsePlaylist.prevPageToken);
+    return new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(playlist.snippet.title)
+        .setImage(playlist.snippet.thumbnails.default.url)
+        .setFooter(`Total in playlist ${responsePlaylistItems.pageInfo.totalResults} songs`)
+        .setTimestamp()
+        .addField(`First ${responsePlaylistItems.pageInfo.resultsPerPage} songs in the playlist`, list, false);
+}
 
-        const nextPageButton = new MessageButton()
-            .setStyle('gray')
-            .setID(`playlistPage ${responsePlaylist.nextPageToken} ${searchAttributes}`)
-            .setLabel(`Next page`)
-            .setDisabled(!responsePlaylist.nextPageToken);
+function createPlaylistButtons(responsePlaylist, searchAttributes) {
+    const previousPageButton = new MessageButton()
+        .setStyle('gray')
+        .setID(`playlistPage ${responsePlaylist.prevPageToken} ${searchAttributes}`)
+        .setLabel(`Previous page`)
+        .setDisabled(!responsePlaylist.prevPageToken);
 
-        const playlistButton = new MessageButton()
-            .setStyle('blurple')
-            .setID(`playlist ${responsePlaylist.items[0].id.playlistId}`)
-            .setLabel(`Play this playlist`);
+    const nextPageButton = new MessageButton()
+        .setStyle('gray')
+        .setID(`playlistPage ${responsePlaylist.nextPageToken} ${searchAttributes}`)
+        .setLabel(`Next page`)
+        .setDisabled(!responsePlaylist.nextPageToken);
 
-        return new MessageActionRow()
-            .addComponents(previousPageButton, playlistButton, nextPageButton);
-    }
+    const playlistButton = new MessageButton()
+        .setStyle('blurple')
+        .setID(`playlist ${responsePlaylist.items[0].id.playlistId}`)
+        .setLabel(`Play this playlist`);
+
+    return [previousPageButton, playlistButton, nextPageButton];
 }

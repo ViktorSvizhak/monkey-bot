@@ -9,11 +9,8 @@ module.exports = {
                 const playlist = resultPlaylist.items[0];
                 searcher.getPlaylistItems(playlist.id.playlistId, null, 
                     (resultPlaylistItems) => {
-                        const embed = playlistEmbed.createPlaylistEmbed(resultPlaylist, resultPlaylistItems);
-                        const buttons = playlistEmbed.createPlaylistButtons(resultPlaylist, ...arguments);
-                        
                         button.reply.defer();
-                        button.message.edit(embed, buttons);
+                        button.message.edit(playlistEmbed(resultPlaylist, resultPlaylistItems, ...arguments));
                     })
         });
     }
