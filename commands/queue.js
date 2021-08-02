@@ -1,3 +1,4 @@
+const queueEmbed = require('../modules/embed/queueEmbed');
 const musicPlayer = require('../modules/music/musicPlayer');
 
 module.exports = {
@@ -5,19 +6,13 @@ module.exports = {
     minArgs: 0,
     maxArgs: 0,
     callback: (message, arguments) => {
-        const songs = musicPlayer.getAllSongs(message.guild.id);
+        const queueInfo = musicPlayer.getQueueInfo(message.guild.id);
 
-        if(!songs) {
+        if(!queueInfo) {
             return message.channel.send("No songs in the queue");
         }
 
-        var songList = 'Songs queue:';
-        var index = 0;
-        songs.forEach(element => {
-            songList += `\n${++index}. ${element.title}`;
-        })
-
-        return message.channel.send(songList);
+        return message.channel.send(queueEmbed(queueInfo));
     },
     permissions: [],
     requiredRoles: [],
