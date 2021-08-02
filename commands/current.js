@@ -5,13 +5,13 @@ module.exports = {
     minArgs: 0,
     maxArgs: 0,
     callback: (message, arguments) => {
-        const song = musicPlayer.getCurrentSong(message.guild.id);
+        const queueInfo = musicPlayer.getQueueInfo(message.guild.id);
 
-        if(!song) {
+        if(!queueInfo?.currentSong) {
             return message.channel.send("No song is playing right now");
         }
 
-        return message.channel.send(`Now playing song **"${song.title}"**`);
+        return message.channel.send(`Now playing song **"${queueInfo.currentSong.title}"**`);
     },
     permissions: [],
     requiredRoles: [],

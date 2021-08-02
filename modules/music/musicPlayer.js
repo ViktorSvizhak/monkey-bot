@@ -74,20 +74,18 @@ module.exports = {
         }
     },
 
-    getCurrentSong: (serverId) => {
-        const serverQueue = servers.get(serverId);
-        return serverQueue?.currentSong;
-    },
-
-    getAllSongs: (serverId) => {
+    getQueueInfo: (serverId) => {
         const serverQueue = servers.get(serverId);
 
         if (!serverQueue) {
             return;
         }
 
-        return [serverQueue.currentSong, ...serverQueue.songs];
-    }
+        return {
+            currentSong: serverQueue.currentSong,
+            queueSong: serverQueue.songs
+        };
+    },
 }
 
 function initServerQueue(serverId, voiceChannel, textChannel) {
@@ -110,7 +108,7 @@ function initServerQueue(serverId, voiceChannel, textChannel) {
 
 async function startPlaying(serverQueue) {
     if(serverQueue.playing){
-        return
+        return;
     }
 
     try {
