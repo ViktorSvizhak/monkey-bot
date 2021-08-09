@@ -1,4 +1,3 @@
-const ytdl = require('ytdl-core');
 const musicPlayer = require('../modules/music/musicPlayer');
 const songInfo = require('../modules/music/songInfo');
 

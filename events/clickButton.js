@@ -1,5 +1,4 @@
-const fs = require('fs');
-const logger = require('../modules/common/logger');
+const logger = require('../modules/common/logger')('clickButton-event');
 const moduleLoader = require('../initializators/moduleLoader');
 
 const buttons = moduleLoader('../buttons');

@@ -1,4 +1,4 @@
-const logger = require('../modules/common/logger');
+const logger = require('../modules/common/logger')('ready-event');
 
 module.exports = {
 	name: 'ready',

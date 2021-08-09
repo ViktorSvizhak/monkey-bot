@@ -1,9 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const logger = require('../modules/common/logger');
 
 module.exports = (folder, moduleFormatter) => {
-	logger.info(`Start initialization folder "${folder}"`)
 
     if (!moduleFormatter) {
         moduleFormatter = (option) => {
@@ -13,8 +11,6 @@ module.exports = (folder, moduleFormatter) => {
     
     const modules = [];
     readModules(folder, moduleFormatter, modules);
-
-	logger.info(`Finish initialization folder "${folder}"`)
 
     return modules
 }
@@ -30,8 +26,6 @@ function readModules(dir, crerateModule, output) {
 		} else {
 			const option = require(path.join(__dirname, dir, file));
 			output.push(crerateModule(option));
-
-			logger.info(`Module "${file}" initialized`);
 		}
 	}
 }

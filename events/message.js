@@ -1,4 +1,4 @@
-const logger = require('../modules/common/logger');
+const logger = require('../modules/common/logger')('message-event');
 const moduleLoader = require('../initializators/moduleLoader');
 const configuration = require('../configurations/configuration');
 

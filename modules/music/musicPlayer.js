@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const logger = require('../common/logger');
+const logger = require('../common/logger')('musicPlayer');
 
 const servers = new Map();
 

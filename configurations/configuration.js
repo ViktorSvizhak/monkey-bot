@@ -7,5 +7,9 @@ module.exports = {
     botToken: process?.env?.bot_token 
         ?? fileConfig.module.bot_token,
     youtubeToken: process?.env?.youtube_token 
-        ?? fileConfig.module.youtube_token
+        ?? fileConfig.module.youtube_token,
+    coralogixToken: process?.env?.coralogix_token
+        ?? fileConfig.module.coralogix_token,
+    loggerAppender: process?.env?.logger_appender
+        ?? fileConfig.module.logger_appender,
 }
