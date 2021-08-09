@@ -24,7 +24,7 @@ module.exports = {
         
         songs.forEach(element => {
             serverQueue.songs.push(element);
-            //serverQueue.textChannel.send(`Song **${element.title}** added to queue`);
+            logger.info(`Added ${songs.length} songs to queue ${serverId}`)
         })
 
         startPlaying(serverQueue);
@@ -69,8 +69,9 @@ module.exports = {
 
         if (serverQueue) {
             serverQueue.connection?.dispatcher?.end();
-
             servers.delete(serverId);
+
+            logger.info(`Connection to ${serverId} aborted`)
         }
     },
 

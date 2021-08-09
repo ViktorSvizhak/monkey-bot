@@ -48,6 +48,8 @@ module.exports = {
             return;
         }
 
+        logger.debug(`Excecuting command ${command.commands[0]}`);
+
         command.callback(message, arguments);
     }
 }
