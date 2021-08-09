@@ -24,8 +24,9 @@ module.exports = {
         
         songs.forEach(element => {
             serverQueue.songs.push(element);
-            logger.info(`Added ${songs.length} songs to queue ${serverId}`)
         })
+
+        logger.info(`Added ${songs.length} songs to queue ${serverId}`);
 
         startPlaying(serverQueue);
     },
@@ -68,6 +69,7 @@ module.exports = {
         const serverQueue = servers.get(serverId);
 
         if (serverQueue) {
+            serverQueue.songs = [];
             serverQueue.connection?.dispatcher?.end();
             servers.delete(serverId);
 
