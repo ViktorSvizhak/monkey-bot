@@ -1,4 +1,4 @@
-const logger = require('../modules/common/logger');
+const logger = require('../modules/common/logger')('eventInitializator');
 const moduleLoader = require('./moduleLoader');
 
 const events = moduleLoader('../events');

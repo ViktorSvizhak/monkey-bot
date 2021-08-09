@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const logger = require('../common/logger');
+const logger = require('../common/logger')('musicPlayer');
 
 const servers = new Map();
 
@@ -24,8 +24,9 @@ module.exports = {
         
         songs.forEach(element => {
             serverQueue.songs.push(element);
-            //serverQueue.textChannel.send(`Song **${element.title}** added to queue`);
         })
+
+        logger.info(`Added ${songs.length} songs to queue ${serverId}`);
 
         startPlaying(serverQueue);
     },
@@ -68,9 +69,11 @@ module.exports = {
         const serverQueue = servers.get(serverId);
 
         if (serverQueue) {
+            serverQueue.songs = [];
             serverQueue.connection?.dispatcher?.end();
-
             servers.delete(serverId);
+
+            logger.info(`Connection to ${serverId} aborted`)
         }
     },
 

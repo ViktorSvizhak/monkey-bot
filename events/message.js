@@ -1,4 +1,4 @@
-const logger = require('../modules/common/logger');
+const logger = require('../modules/common/logger')('message-event');
 const moduleLoader = require('../initializators/moduleLoader');
 const configuration = require('../configurations/configuration');
 
@@ -47,6 +47,8 @@ module.exports = {
             );
             return;
         }
+
+        logger.debug(`Excecuting command ${command.commands[0]}`);
 
         command.callback(message, arguments);
     }

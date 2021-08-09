@@ -1,18 +1,58 @@
-module.exports = {
-    info: (message) => {
-        console.log(formatMessage(message));
-    },
+var bunyan = require('bunyan');
+var CoralogixBunyan = require('coralogix-logger-bunyan');
+var configuration = require('../../configurations/configuration');
 
-    warn: (message) => {
-        console.warn(formatMessage(message));
-    },
+var config = {
+    privateKey: configuration.coralogixToken,
+    applicationName: 'bot-monkey',
+    subsystemName: 'bot-core',
+};
 
-    error: (exception, message) => {
-        console.error(
-            formatMessage(`${message}\nException:\n${exception}`));
-    }
+const stream = configureStream();
+
+module.exports = (loggerName) => {
+    return bunyan.createLogger({
+        name: loggerName,
+        streams: [ stream ]
+    });
 }
 
-function formatMessage(message) {
-    return `[${new Date().toISOString()}] ${message}`;
+function configureStream() {
+    switch(configuration.loggerAppender) {
+        case 'coralogix':
+            CoralogixBunyan.CoralogixStream.configure(config);
+        
+            return {
+                level: 'info',
+                stream: new CoralogixBunyan.CoralogixStream(),
+                type: 'raw'
+            };
+        
+        case 'console':
+            return {
+                level: 'trace',
+                stream: {
+                    write: (log) => {
+                        log.level = bunyan.nameFromLevel[log.level];
+                        
+                        var logLine = `${log.time.toISOString()} - ${log.level.toUpperCase()}: ${log.msg}`;
+            
+                        switch (log.level) {
+                            case 'error':
+                                return console.error(`${logLine}\nException: ${log.err.stack}`);
+                            
+                            case 'warn':
+                                return console.warn(logLine);
+            
+                            default:
+                                return console.log(logLine); 
+                        }
+                    }
+                },
+                type: 'raw'
+            }
+
+        default:
+            console.error(`FATAL - Incorrect appender "${configuration.loggerAppender}"`)
+    }
 }

@@ -1,4 +1,4 @@
-const logger = require("../modules/common/logger");
+const logger = require('../modules/common/logger')('disconnect-event');
 
 module.exports = {
 	name: 'disconnect',
