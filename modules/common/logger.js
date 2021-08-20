@@ -23,14 +23,14 @@ function configureStream() {
             CoralogixBunyan.CoralogixStream.configure(config);
         
             return {
-                level: 'info',
+                level: configuration.loggerLevel,
                 stream: new CoralogixBunyan.CoralogixStream(),
                 type: 'raw'
             };
         
         case 'console':
             return {
-                level: 'trace',
+                level: configuration.loggerLevel,
                 stream: {
                     write: (log) => {
                         log.level = bunyan.nameFromLevel[log.level];

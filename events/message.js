@@ -48,8 +48,8 @@ module.exports = {
             return;
         }
 
-        logger.debug(`Excecuting command ${command.commands[0]}`);
-
+        logger.debug(`Excecuting command "${command.commands[0]}" from "${message.author.username}". Server: "${message.guild.id}" Channel: "${message.channel.name}"`);
+        
         command.callback(message, arguments);
     }
 }

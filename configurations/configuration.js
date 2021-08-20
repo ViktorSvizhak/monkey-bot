@@ -12,4 +12,6 @@ module.exports = {
         ?? fileConfig.module.coralogix_token,
     loggerAppender: process?.env?.logger_appender
         ?? fileConfig.module.logger_appender,
+    loggerLevel: process?.env?.logger_level
+        ?? fileConfig.module.logger_level,
 }
