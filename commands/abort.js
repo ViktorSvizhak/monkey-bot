@@ -9,4 +9,5 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    //description: 'Brute abort connection with voice channel',
 }

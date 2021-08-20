@@ -16,4 +16,5 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    description: 'Get queue of songs',
 }

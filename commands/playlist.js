@@ -3,7 +3,7 @@ const playlistEmbed = require('../modules/embed/playlistEmbed');
 
 module.exports = {
     commands: 'playlist',
-    expectedArgs: '<search text>',
+    expectedArgs: '<search keywords>',
     minArgs: 1,
     maxArgs: null,
     callback: (message, arguments) => {
@@ -19,4 +19,5 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    description: 'Search playlist in YouTube by keywords',
 }
