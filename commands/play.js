@@ -5,7 +5,7 @@ const songInfo = require('../modules/music/songInfo');
 
 module.exports = {
     commands: 'play',
-    expectedArgs: '<search text>',
+    expectedArgs: '<search keywords>',
     minArgs: 1,
     maxArgs: null,
     callback: async (message, arguments) => {
@@ -50,4 +50,8 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    //description: 'Play most related song by keyword. Possible process also URL and video ID',
+    description: [
+        '<search keywords> $$ Play most related song by keyword.',
+        '<video URL> $$ Play song from YouTube URL.']
 }

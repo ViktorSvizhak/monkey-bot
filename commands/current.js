@@ -15,4 +15,5 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    description: 'Get current playing song name',
 }

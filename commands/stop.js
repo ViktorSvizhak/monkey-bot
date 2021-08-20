@@ -15,4 +15,5 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    description: 'Stop playing current song and clean the queue',
 }
