@@ -1,4 +1,5 @@
 const helpEmbed = require('../modules/embed/helpEmbed');
+const helpDetailedEmbed = require('../modules/embed/helpDetailEmbed');
 const helpHandler = require('../modules/common/helpHandler');
 
 const embeds = new Map();
@@ -12,7 +13,7 @@ module.exports = {
             return message.channel.send(getAllCommandsEmbed());
         }
 
-        var commandName = arguments.unshift(); 
+        var commandName = arguments.shift(); 
         
         return message.channel.send(getDetailedCommandEmbed(commandName));
     },
@@ -40,5 +41,21 @@ function getAllCommandsEmbed() {
 }
 
 function getDetailedCommandEmbed(commandName) {
-    //TODO
+    var embed = embeds.get(commandName);
+
+    if (embed) {
+        return embed;
+    }
+
+    const command = helpHandler.getDetailedCommand(commandName);
+
+    if (!command) {
+        return `Undefined command **"${commandName}"**! Use command **"help"**, to check posible commands`
+    }
+
+    embed = helpDetailedEmbed(command);
+
+    embeds.set(commandName, embed);
+
+    return embed;
 }
