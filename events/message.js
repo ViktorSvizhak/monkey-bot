@@ -1,6 +1,7 @@
 const logger = require('../modules/common/logger')('message-event');
 const moduleLoader = require('../initializators/moduleLoader');
 const configuration = require('../configurations/configuration');
+const helpHandler = require('../modules/common/helpHandler');
 
 const commands = moduleLoader('../commands', commandFormatter);
 
@@ -43,7 +44,7 @@ module.exports = {
 
         if (arguments.length < command.minArgs || (command.maxArgs !== null && arguments.length > command.maxArgs)) {
             message.reply(
-                `Incorrect syntax! Use ${configuration.prefix}${command.commands[0]} ${command.expectedArgs}`
+                `Incorrect syntax! Use ${configuration.prefix}help, to check posible commands`
             );
             return;
         }
@@ -57,13 +58,13 @@ module.exports = {
 function commandFormatter(commandOptions) {
     let {
         commands,
-        expectedArgs = '',
         permissionError = 'You do not have permission to run this command.',
         minArgs = 0,
         maxArgs = null,
         permissions = [],
         requiredRoles = [],
         callback,
+        description = []
     } = commandOptions;
 
     // Ensure the command and aliases are in an array
@@ -72,6 +73,11 @@ function commandFormatter(commandOptions) {
     }
 
     logger.info(`Registering command "${commands[0]}"`);
+
+    // Ensure the command and aliases are in an array
+    if (typeof description === 'string') {
+        description = [description];
+    }
 
     // Ensure the permissions are in an array and are all valid
     if (permissions.length) {
@@ -82,16 +88,20 @@ function commandFormatter(commandOptions) {
         validatePermissions(permissions);
     }
 
-    return {
+    const command = {
         commands: commands,
-        expectedArgs: expectedArgs,
         permissionError: permissionError,
         minArgs: minArgs,
         maxArgs: maxArgs,
         permissions: permissions,
         requiredRoles: requiredRoles,
         callback: callback,
+        description: description,
     }
+
+    helpHandler.initializeCommand(command);
+
+    return command;
 }
 
 const validatePermissions = (permissions) => {

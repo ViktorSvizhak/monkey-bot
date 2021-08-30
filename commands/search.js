@@ -3,7 +3,7 @@ const searcher = require('../modules/music/searcher');
 
 module.exports = {
     commands: 'search',
-    expectedArgs: '<search text>',
+    expectedArgs: '<search keywords>',
     minArgs: 1,
     maxArgs: null,
     callback: (message, arguments) => {
@@ -14,5 +14,6 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
+    description: '<search keywords> $$ Search top 5 songs in YouTube by keywords',
 }
 
