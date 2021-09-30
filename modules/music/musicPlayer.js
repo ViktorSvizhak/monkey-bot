@@ -143,7 +143,10 @@ function playLoop(serverQueue) {
             playLoop(serverQueue);
         })
         .on('error', (error) => {
-            logger.error(error, "Failed to play song")
+            logger.error(error, "Failed to play song");
+            serverQueue.textChannel.send(`Oops... Sorry, I fuck up to play **${serverQueue.currentSong?.title}**. Let's try next song`);
+            serverQueue.currentSong = null;
+            playLoop(serverQueue);
         });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
