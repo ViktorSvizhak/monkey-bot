@@ -19,6 +19,7 @@
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.4.0",
     "fluent-ffmpeg": "^2.1.2",
+    "is-promise": "^4.0.0",
     "linq": "^3.2.3",
     "ytdl-core": "^4.9.1",
     "ytsr": "^3.5.0"

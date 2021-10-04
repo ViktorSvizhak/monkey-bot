@@ -1,3 +1,4 @@
+const isPromise = require('is-promise');
 const logger = require('../modules/common/logger')('message-event');
 const moduleLoader = require('../initializators/moduleLoader');
 const configuration = require('../configurations/configuration');
@@ -52,10 +53,22 @@ module.exports = {
         logger.debug(`Excecuting command "${command.commands[0]}" from "${message.author.username}". Server: "${message.guild.id}" Channel: "${message.channel.name}"`);
         
         try {
-            command.callback(message, arguments);
+            const res = command.callback(message, arguments);
+
+            if(isPromise(res)){
+                return res.catch(function(ex) {
+                    logger.error(ex, `Failed to proceed promise for "${command.commands[0]}"`);
+
+                    message.reply(
+                        `Oops ... Something went wrong :( \nUse **${configuration.prefix}help**, to check another posible commands`
+                    );
+                });
+            }
+
+            return res;
         }
         catch (ex) {
-            logger.error(ex, `Failed execute command "${command.commands[0]}"`);
+            logger.error(ex, `Failed to execute command "${command.commands[0]}"`);
 
             message.reply(
                 `Oops ... Something went wrong :( \nUse **${configuration.prefix}help**, to check another posible commands`
