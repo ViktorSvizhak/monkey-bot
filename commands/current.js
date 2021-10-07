@@ -1,3 +1,4 @@
+const messageUtils = require('../modules/common/messageUtils');
 const musicPlayer = require('../modules/music/musicPlayer');
 
 module.exports = {
@@ -8,10 +9,10 @@ module.exports = {
         const queueInfo = musicPlayer.getQueueInfo(message.guild.id);
 
         if(!queueInfo?.currentSong) {
-            return message.channel.send("No song is playing right now");
+            return messageUtils.trySend(message, 'No song is playing right now')
         }
 
-        return message.channel.send(`Now playing song **"${queueInfo.currentSong.title}"**`);
+        return messageUtils.trySend( message, `Now playing song **"${queueInfo.currentSong.title}"**`)
     },
     permissions: [],
     requiredRoles: [],

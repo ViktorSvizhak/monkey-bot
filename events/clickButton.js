@@ -10,6 +10,13 @@ module.exports = {
         const args = button.id.split(' ');
         const command = args.shift();
         buttons.filter(b => command == b.prefix)
-            .forEach(element => element.callback(button, ...args));
+            .forEach(element => {
+                try {
+                    element.callback(button, ...args)
+                }
+                catch (ex) {
+                    logger.error(ex, 'Failed procced button event');
+                }
+            });
     }
 };

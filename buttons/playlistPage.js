@@ -1,3 +1,4 @@
+const messageUtils = require('../modules/common/messageUtils');
 const playlistEmbed = require('../modules/embed/playlistEmbed');
 const searcher = require('../modules/music/searcher');
 
@@ -10,7 +11,8 @@ module.exports = {
                 searcher.getPlaylistItems(playlist.id.playlistId, null, 
                     (resultPlaylistItems) => {
                         button.reply.defer();
-                        button.message.edit(playlistEmbed(resultPlaylist, resultPlaylistItems, ...arguments));
+                        messageUtils.tryEdit(button.message, 
+                            playlistEmbed(resultPlaylist, resultPlaylistItems, ...arguments));
                     })
         });
     }

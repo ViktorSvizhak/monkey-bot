@@ -1,6 +1,7 @@
 const helpEmbed = require('../modules/embed/helpEmbed');
 const helpDetailedEmbed = require('../modules/embed/helpDetailEmbed');
 const helpHandler = require('../modules/common/helpHandler');
+const messageUtils = require('../modules/common/messageUtils');
 
 const embeds = new Map();
 
@@ -10,12 +11,12 @@ module.exports = {
     maxArgs: 1,
     callback: (message, arguments) => {
         if (!arguments.length) {
-            return message.channel.send(getAllCommandsEmbed());
+            return messageUtils.trySend(message, getAllCommandsEmbed())
         }
 
         var commandName = arguments.shift(); 
         
-        return message.channel.send(getDetailedCommandEmbed(commandName));
+        return messageUtils.trySend(message, getDetailedCommandEmbed(commandName))
     },
     permissions: [],
     requiredRoles: [],

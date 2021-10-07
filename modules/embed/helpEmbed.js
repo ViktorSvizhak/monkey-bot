@@ -6,7 +6,7 @@ module.exports = (commands) => {
     const embed = new MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Possible commands')
-        .setTimestamp()
+        .setTimestamp();
 
     commands.forEach(command => {
         command.description.forEach(description => {

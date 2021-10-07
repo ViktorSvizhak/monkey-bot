@@ -1,4 +1,5 @@
-const searchEmbed = require("../modules/embed/searchEmbed");
+const messageUtils = require('../modules/common/messageUtils');
+const searchEmbed = require('../modules/embed/searchEmbed');
 const searcher = require('../modules/music/searcher');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
     callback: (message, arguments) => {
         searcher.searchVideosByParams(arguments, 5,
             (result) => {
-                message.channel.send(searchEmbed(result));
+                messageUtils.trySend(message, searchEmbed(result));
         });
     },
     permissions: [],

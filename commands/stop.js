@@ -1,3 +1,4 @@
+const messageUtils = require('../modules/common/messageUtils');
 const musicPlayer = require('../modules/music/musicPlayer');
 
 module.exports = {
@@ -6,7 +7,7 @@ module.exports = {
     maxArgs: 0,
     callback: (message, arguments) => {
         if (!message.member.voice.channel){
-            return message.channel.send(
+            return messageUtils.tryReply(message,
                 'You have to be in a voice channel to stop the music!'
             );
         }
