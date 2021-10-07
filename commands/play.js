@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const messageUtils = require('../modules/common/messageUtils');
 const musicPlayer = require('../modules/music/musicPlayer');
 const searcher = require('../modules/music/searcher');
 const songInfo = require('../modules/music/songInfo');
@@ -11,14 +12,13 @@ module.exports = {
     callback: async (message, arguments) => {
         const voiceChannel = message.member.voice.channel;
         if (!voiceChannel){
-            return message.channel.send(
-                'You need to be in a voice channel to play music!'
-            );
+            return messageUtils.tryReply(message, 
+                'You need to be in a voice channel to play music!')
         }
 
         const permissions = voiceChannel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-            return message.channel.send(
+            return messageUtils.tryReply(message,
                 'I need the permissions to join and speak in your voice channel!'
             );
         }
@@ -50,7 +50,6 @@ module.exports = {
     },
     permissions: [],
     requiredRoles: [],
-    //description: 'Play most related song by keyword. Possible process also URL and video ID',
     description: [
         '<search keywords> $$ Play most related song by keyword.',
         '<video URL> $$ Play song from YouTube URL.']

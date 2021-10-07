@@ -1,5 +1,6 @@
 const searcher = require('../modules/music/searcher');
 const playlistEmbed = require('../modules/embed/playlistEmbed');
+const messageUtils = require('../modules/common/messageUtils');
 
 module.exports = {
     commands: 'playlist',
@@ -13,7 +14,8 @@ module.exports = {
                 const playlist = resultPlaylist.items[0];
                 searcher.getPlaylistItems(playlist.id.playlistId, null, 
                     (resultPlaylistItems) => {
-                        message.channel.send(playlistEmbed(resultPlaylist, resultPlaylistItems, params));
+                        messageUtils.trySend(message,
+                            playlistEmbed(resultPlaylist, resultPlaylistItems, params));
                     })
         });
     },

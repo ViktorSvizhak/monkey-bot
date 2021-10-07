@@ -3,6 +3,7 @@ const logger = require('../modules/common/logger')('message-event');
 const moduleLoader = require('../initializators/moduleLoader');
 const configuration = require('../configurations/configuration');
 const helpHandler = require('../modules/common/helpHandler');
+const messageUtils = require('../modules/common/messageUtils');
 
 const commands = moduleLoader('../commands', commandFormatter);
 
@@ -25,8 +26,7 @@ module.exports = {
 
         for (const permission of command.permissions) {
             if (!member.hasPermission(permission)) {
-                message.reply(permissionError);
-                return;
+                return messageUtils.tryReply(message, permissionError);
             }
         }
 
@@ -36,41 +36,27 @@ module.exports = {
             );
 
             if (!role || !member.roles.cache.has(role.id)) {
-                message.reply(
+                return messageUtils.tryReply(message, 
                     `You must have the "${requiredRole}" role to use this command.`
                 );
-                return;
             }
         }
 
         if (arguments.length < command.minArgs || (command.maxArgs !== null && arguments.length > command.maxArgs)) {
-            message.reply(
+            return messageUtils.tryReply(message, 
                 `Incorrect syntax! Use **${configuration.prefix}help**, to check posible commands`
             );
-            return;
         }
 
         logger.debug(`Excecuting command "${command.commands[0]}" from "${message.author.username}". Server: "${message.guild.id}" Channel: "${message.channel.name}"`);
         
         try {
-            const res = command.callback(message, arguments);
-
-            if(isPromise(res)){
-                return res.catch(function(ex) {
-                    logger.error(ex, `Failed to proceed promise for "${command.commands[0]}"`);
-
-                    message.reply(
-                        `Oops ... Something went wrong :( \nUse **${configuration.prefix}help**, to check another posible commands`
-                    );
-                });
-            }
-
-            return res;
+            return command.callback(message, arguments);
         }
         catch (ex) {
             logger.error(ex, `Failed to execute command "${command.commands[0]}"`);
 
-            message.reply(
+            return messageUtils.tryReply(message, 
                 `Oops ... Something went wrong :( \nUse **${configuration.prefix}help**, to check another posible commands`
             );
         }

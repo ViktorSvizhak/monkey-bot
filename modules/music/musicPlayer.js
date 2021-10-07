@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const messageUtils = require('../common/messageUtils');
 const logger = require('../common/logger')('musicPlayer');
 
 const servers = new Map();
@@ -9,7 +10,8 @@ module.exports = {
         if (!serverQueue) {
             serverQueue = initServerQueue(serverId, voiceChannel, textChannel);
         } else {
-            serverQueue.textChannel.send(`Song **${song.title}** added to queue`);
+            return messageUtils.trySend(null, 
+                `Song **${song.title}** added to queue`, serverQueue.textChannel);
         }
         serverQueue.songs.push(song);
 
@@ -41,7 +43,7 @@ module.exports = {
 
         try {
             serverQueue.connection?.dispatcher?.end();
-            serverQueue.textChannel.send('Song skipped');
+            return messageUtils.trySend(null, 'Song skipped', serverQueue.textChannel);
         } catch (ex) {
             logger.error(ex, 'Failed skip song');
         }
@@ -59,7 +61,7 @@ module.exports = {
             serverQueue.songs = [];
             serverQueue.connection?.dispatcher?.end();
 
-            serverQueue.textChannel.send('Playing stopped');
+            return messageUtils.trySend(null, 'Playing stopped', serverQueue.textChannel);
         } catch (ex) {
             logger.error(ex, 'Failed stop playing');
         }
@@ -121,7 +123,7 @@ async function startPlaying(serverQueue) {
         playLoop(serverQueue);
     } catch (ex) {
         logger.error(ex, 'failed to play song');
-        return serverQueue.textChannel.send(`Failed to play song`);
+        return messageUtils.trySend(null, 'Failed to play song', serverQueue.textChannel);
     }
 }
 
@@ -144,11 +146,13 @@ function playLoop(serverQueue) {
         })
         .on('error', (error) => {
             logger.error(error, "Failed to play song");
-            serverQueue.textChannel.send(`Oops... Sorry, I fuck up to play **${serverQueue.currentSong?.title}**. Let's try next song`);
+            messageUtils.trySend(null, 
+                `Oops... Sorry, I fuck up to play **${serverQueue.currentSong?.title}**. Let's try next song`,
+                serverQueue.textChannel)
             serverQueue.currentSong = null;
             playLoop(serverQueue);
         });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-    serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+    messageUtils.trySend(null, `Start playing: **${song.title}**`, serverQueue.textChannel)
 }

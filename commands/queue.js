@@ -1,3 +1,4 @@
+const messageUtils = require('../modules/common/messageUtils');
 const queueEmbed = require('../modules/embed/queueEmbed');
 const musicPlayer = require('../modules/music/musicPlayer');
 
@@ -9,10 +10,10 @@ module.exports = {
         const queueInfo = musicPlayer.getQueueInfo(message.guild.id);
 
         if(!queueInfo) {
-            return message.channel.send("No songs in the queue");
+            return messageUtils.trySend(message, 'No songs in the queue');
         }
 
-        return message.channel.send(queueEmbed(queueInfo));
+        return messageUtils.trySend(message, queueEmbed(queueInfo));
     },
     permissions: [],
     requiredRoles: [],
