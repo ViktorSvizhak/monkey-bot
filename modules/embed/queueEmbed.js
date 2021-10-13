@@ -21,13 +21,21 @@ function createEmbed(queueInfo, pageNumber) {
         songList += `${index}. ${queueInfo.queueSong[index - 1].title.slice(0, 90)}\n`;
     }
     
-    return new MessageEmbed()
+    var embed =  new MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Queue of songs')
         .setTimestamp()
-        .setFooter(`Page ${pageNumber + 1} of ${getCountOfPage(queueInfo)}`)
-        .addField('Currently play',  queueInfo.currentSong.title, false)
-        .addField('Songs in queue', songList, false);
+        .setFooter(`Page ${pageNumber + 1} of ${getCountOfPage(queueInfo)}`);
+
+    if (queueInfo.currentSong) {
+        embed.addField('Currently play',  queueInfo.currentSong.title, false);
+    }
+    
+    if (songList) {
+        embed.addField('Songs in queue', songList, false);
+    }
+        
+    return embed;
 }
 
 function createButtons(queueInfo, pageNumber) {

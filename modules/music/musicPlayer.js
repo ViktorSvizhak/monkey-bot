@@ -10,7 +10,7 @@ module.exports = {
         if (!serverQueue) {
             serverQueue = initServerQueue(serverId, voiceChannel, textChannel);
         } else {
-            return messageUtils.trySend(null, 
+            messageUtils.trySend(null, 
                 `Song **${song.title}** added to queue`, serverQueue.textChannel);
         }
         serverQueue.songs.push(song);
