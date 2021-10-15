@@ -11,7 +11,7 @@ module.exports = {
 	name: 'message',
 	once: false,
 	callback: (message) => {
-        if (!message.content.startsWith(configuration.prefix)) {
+        if (!message.content.startsWith(configuration.prefix) || message.author.bot) {
             return;
         }
 
