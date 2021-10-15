@@ -15,7 +15,7 @@ module.exports = {
             return;
         }
 
-        const arguments = message.content.split(/[ ]+/);
+        const arguments = message.content.split(/([ \n])+/);
         const commandName = arguments.shift().substring(configuration.prefix.length);
 
         const command = commands.find(element => element.commands.some(alias => commandName.toLowerCase() === alias));
