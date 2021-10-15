@@ -6,7 +6,7 @@ const searcher = require('../modules/music/searcher');
 const songInfo = require('../modules/music/songInfo');
 
 module.exports = {
-    commands: 'play:',
+    commands: ['play:', 'playmany:'],
     expectedArgs: '<search keywords>',
     minArgs: 1,
     maxArgs: null,
@@ -36,7 +36,7 @@ module.exports = {
                 (result) => {
                     if (!result.items.length) {
                         logger.warn(`Failed to search song by text "${arguments}"`);
-                        
+
                         if (!sentFailedMessage) {
                             messageUtils.tryReply(message, 'Some of your songs is failed to play');
                             sentFailedMessage = true;

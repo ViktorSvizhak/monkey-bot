@@ -101,7 +101,8 @@ function initServerQueue(serverId, voiceChannel, textChannel) {
         songs: [],
         volume: 5,
         playing: false,
-        currentSong: null
+        currentSong: null,
+        serverId: serverId
     };
 
     servers.set(serverId, queueContruct);
@@ -133,6 +134,9 @@ function playLoop(serverQueue) {
     if (!song) {
         serverQueue.voiceChannel.leave();
         serverQueue.playing = false;
+
+        servers.delete(serverQueue.serverId);
+
         return;
     }
     
